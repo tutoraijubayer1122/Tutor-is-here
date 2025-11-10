@@ -1245,6 +1245,66 @@
         document.getElementById('registrationSection').classList.add('hidden');
         document.getElementById('mainDashboard').classList.add('hidden');
         document.getElementById('loginSection').classList.remove('hidden');
+   // OVERRIDE FUNCTIONS FOR ALL TEACHERS TO SEE ALL QUESTIONS
+function loadStudentQuestionsForTeacher() {
+    const pendingQuestions = studentQuestions.filter(q => q.status === 'waiting');
+    
+    if (pendingQuestions.length > 0) {
+        document.getElementById('pendingStudentQuestions').innerHTML = pendingQuestions.map(question => `
+            <div style="background: white; padding: 10px; margin: 10px 0; border-radius: 8px; border: 1px solid #10b981;">
+                <strong>Student ${question.studentName} asked:</strong><br>
+                "${question.question}"
+            </div>
+        `).join('');
+    } else {
+        document.getElementById('pendingStudentQuestions').innerHTML = '<p>No pending questions yet.</p>';
+    }
+}
+
+function loadTeacherContentForStudent() {
+    const explanations = teacherExplanations;
+    const answers = teacherAnswers;
+    
+    let contentHTML = '';
+    
+    if (explanations.length > 0) {
+        contentHTML += `<h5>📚 Teacher Explanations:</h5>`;
+        contentHTML += explanations.map(exp => `
+            <div style="background: white; padding: 10px; margin: 10px 0; border-radius: 8px; border: 1px solid #2563eb;">
+                <strong>Teacher ${exp.teacherName}:</strong><br>
+                "${exp.explanation}"
+            </div>
+        `).join('');
+    }
+    
+    if (answers.length > 0) {
+        contentHTML += `<h5>💬 Teacher Answers:</h5>`;
+        contentHTML += answers.map(ans => `
+            <div style="background: white; padding: 10px; margin: 10px 0; border-radius: 8px; border: 1px solid #2563eb;">
+                <strong>Teacher ${ans.teacherName} answered:</strong><br>
+                "<em>${ans.originalQuestion}</em>"<br>
+                <strong>Answer:</strong> "${ans.answer}"
+                <button onclick="respondToAnswer('${ans.teacherName}', '${ans.answer}')" 
+                        style="background: #10b981; padding: 5px 10px; margin-top: 5px; border: none; border-radius: 5px; color: white; cursor: pointer;">
+                    💬 Respond to This Answer
+                </button>
+            </div>
+        `).join('');
+    }
+    
+    if (contentHTML === '') {
+        contentHTML = '<p>No content available yet. Be the first to ask a question!</p>';
+    }
+    
+    document.getElementById('teacherContentDisplay').innerHTML = contentHTML;
+}
+
+function respondToAnswer(teacherName, answer) {
+    document.getElementById('studentResponseToTeacher').placeholder = 
+        `Respond to Teacher ${teacherName}'s answer: "${answer.substring(0, 50)}..."`;
+    showTab('qa');
+    document.getElementById('studentResponseToTeacher').focus();
+}
     </script>
 </body>
 </html>
