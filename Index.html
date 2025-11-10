@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>TutorMatch AI - Smart Learning Platform</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            background: #f0f8ff;
+            padding: 20px;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2563eb;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #374151;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+        
+        button {
+            width: 100%;
+            padding: 16px;
+            background: #2563eb;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #1d4ed8;
+        }
+        
+        button.secondary {
+            background: #6b7280;
+        }
+        
+        button.secondary:hover {
+            background: #4b5563;
+        }
+        
+        button.success {
+            background: #10b981;
+        }
+        
+        button.success:hover {
+            background: #059669;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .dashboard {
+            background: #f8fafc;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 4px solid #2563eb;
+        }
+        
+        .recommendation-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #e5e7eb;
+            margin-bottom: 15px;
+            transition: transform 0.3s;
+        }
+        
+        .recommendation-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .top-match {
+            border: 3px solid #10b981;
+            background: #ecfdf5;
+        }
+        
+        .match-score {
+            font-size: 24px;
+            font-weight: bold;
+            color: #10b981;
+        }
+        
+        .score-high { color: #10b981; }
+        .score-medium { color: #f59e0b; }
+        .score-low { color: #ef4444; }
+        
+        /* Q&A Styles */
+        .content-card {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #e5e7eb;
+            margin-bottom: 15px;
+        }
+        
+        .teacher-content {
+            border-left: 4px solid #2563eb;
+            background: #f0f9ff;
+        }
+        
+        .student-content {
+            border-left: 4px solid #10b981;
+            background: #f0fdf4;
+        }
+        
+        .interaction-box {
+            background: #fef3c7;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #f59e0b;
+            margin: 15px 0;
+        }
+        
+        .question-box {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+            margin-bottom: 15px;
+        }
+        
+        .result-box {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #e5e7eb;
+            margin-top: 15px;
+        }
+        
+        .notification {
+            background: #dbeafe;
+            border: 2px solid #2563eb;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); }
+        }
+        
+        .ai-analysis {
+            background: #f0f9ff;
+            border: 2px solid #2563eb;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .analysis-result {
+            background: #ecfdf5;
+            border: 2px solid #10b981;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+        
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #2563eb;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .user-details {
+            flex: 1;
+        }
+        
+        .tab-container {
+            display: flex;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            font-weight: 600;
+            border-bottom: 3px solid transparent;
+        }
+        
+        .tab.active {
+            border-bottom: 3px solid #2563eb;
+            color: #2563eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎓 TutorMatch AI</h1>
+        <p class="subtitle">Smart Matching & Learning Analysis Platform</p>
+        
+        <!-- Registration Form -->
+        <div id="registrationSection">
+            <form id="registrationForm">
+                <!-- User Type -->
+                <div class="form-group">
+                    <label>I am a:</label>
+                    <select id="userType" onchange="toggleSalaryField()" required>
+                        <option value="">Select your role</option>
+                        <option value="student">Student</option>
+                        <option value="teacher">Teacher</option>
+                    </select>
+                </div>
+                
+                <!-- Basic Info -->
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="fullName" placeholder="Enter your full name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Institution</label>
+                    <input type="text" id="institution" placeholder="School/College/University" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Class/Grade</label>
+                    <select id="classLevel" required>
+                        <option value="">Select your class</option>
+                        <option value="6-8">Class 6-8</option>
+                        <option value="9-10">Class 9-10</option>
+                        <option value="11-12">Class 11-12</option>
+                        <option value="college">College/University</option>
+                    </select>
+                </div>
+                
+                <!-- Subject Selection -->
+                <div class="form-group">
+                    <label id="subjectLabel">Which subject do you want to study?</label>
+                    <select id="subject" required>
+                        <option value="">Select subject</option>
+                        <option value="math">Mathematics</option>
+                        <option value="physics">Physics</option>
+                        <option value="chemistry">Chemistry</option>
+                        <option value="biology">Biology</option>
+                        <option value="english">English</option>
+                        <option value="bangla">Bangla</option>
+                        <option value="ict">ICT/Computer</option>
+                    </select>
+                </div>
+                
+                <!-- Salary (Teachers Only) -->
+                <div class="form-group hidden" id="salaryGroup">
+                    <label>Expected Salary (per month)</label>
+                    <select id="salary">
+                        <option value="1000-2000">৳1,000 - ৳2,000</option>
+                        <option value="2000-3000">৳2,000 - ৳3,000</option>
+                        <option value="3000-5000">৳3,000 - ৳5,000</option>
+                        <option value="5000+">৳5,000+</option>
+                    </select>
+                </div>
+                
+                <!-- Time -->
+                <div class="form-group">
+                    <label>Preferred Time</label>
+                    <select id="availableTime" required>
+                        <option value="">Select available time</option>
+                        <option value="morning">Morning (8AM - 12PM)</option>
+                        <option value="afternoon">Afternoon (12PM - 4PM)</option>
+                        <option value="evening">Evening (4PM - 8PM)</option>
+                        <option value="weekend">Weekends Only</option>
+                    </select>
+                </div>
+                
+                <button type="button" onclick="completeRegistration()">Complete Registration</button>
+            </form>
+        </div>
+
+        <!-- Main Dashboard -->
+        <div id="mainDashboard" class="hidden">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <div class="user-details">
+                    <strong id="userName">User Name</strong><br>
+                    <span id="userRole">Role • Subject</span>
+                </div>
+            </div>
+
+            <div class="tab-container">
+                <div class="tab active" onclick="showTab('recommendations')">Recommendations</div>
+                <div class="tab" onclick="showTab('qa')">Q&A System</div>
+                <div class="tab" onclick="showTab('notifications')">Notifications</div>
+            </div>
+
+            <!-- Recommendations Tab -->
+            <div id="recommendationsTab" class="tab-content">
+                <h3>🎯 AI Recommendations</h3>
+                <div id="recommendationsContent">
+                    <!-- Recommendations will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Q&A System Tab -->
+            <div id="qaTab" class="tab-content hidden">
+                <h3>💬 Learning Q&A System</h3>
+                
+                <!-- Student Q&A Interface -->
+                <div id="studentQA" class="hidden">
+                    <!-- Available Content for Student -->
+                    <div id="availableContent" class="content-card teacher-content">
+                        <h4>📖 Available Learning Content:</h4>
+                        <div id="teacherContentDisplay"></div>
+                    </div>
+
+                    <!-- Student Input -->
+                    <div class="interaction-box">
+                        <p><strong>Choose what you want to do:</strong></p>
+                        
+                        <div class="form-group">
+                            <label><strong>Option 1: Ask New Question</strong></label>
+                            <textarea id="studentNewQuestion" placeholder="Ask a new question about any topic..." rows="3"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><strong>Option 2: Respond to Teacher's Explanation</strong></label>
+                            <textarea id="studentResponseToTeacher" placeholder="Share your thoughts or ask follow-up questions about the explanation above..." rows="3"></textarea>
+                        </div>
+                        
+                        <button onclick="saveStudentContent()" class="success">Save Content</button>
+                    </div>
+                </div>
+
+                <!-- Teacher Q&A Interface -->
+                <div id="teacherQA" class="hidden">
+                    <!-- Student Questions for Teacher to Answer -->
+                    <div id="studentQuestionsForTeacher" class="content-card student-content">
+                        <h4>📚 Student Questions Waiting for Your Answer:</h4>
+                        <div id="pendingStudentQuestions"></div>
+                    </div>
+
+                    <!-- Teacher Explanation Input -->
+                    <div class="question-box">
+                        <p><strong>Choose what you want to do:</strong></p>
+                        
+                        <div class="form-group">
+                            <label><strong>Option 1: Answer Student Questions</strong></label>
+                            <textarea id="teacherAnswerToStudent" placeholder="Write your answer to the student's question above..." rows="4"></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label><strong>Option 2: Create New Explanation</strong></label>
+                            <textarea id="teacherNewExplanation" placeholder="Or create a new explanation about any topic..." rows="4"></textarea>
+                        </div>
+                        
+                        <button onclick="saveTeacherContent()">Save Content</button>
+                    </div>
+                </div>
+                
+                <div id="qaResult" class="result-box hidden"></div>
+            </div>
+
+            <!-- Notifications Tab -->
+            <div id="notificationsTab" class="tab-content hidden">
+                <h3>🔔 Notifications</h3>
+                <div id="notificationsContent">
+                    <!-- Notifications will be loaded here -->
+                </div>
+            </div>
+
+            <button onclick="viewAdminDashboard()" class="secondary" style="display: none;" id="adminBtn">Admin Dashboard</button>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div id="adminDashboard" class="dashboard hidden">
+            <h3>📊 Admin Dashboard</h3>
+            <div class="content-card">
+                <h4>AI Analysis Data</h4>
+                <div id="sessionData" style="max-height: 400px; overflow-y: auto;"></div>
+                <button onclick="runAIAnalysis()" class="success" style="margin-top: 10px;">🤖 Run AI Analysis & Matching</button>
+                <button onclick="hideAdminDashboard()" class="secondary" style="margin-top: 15px;">Back to Main</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data Storage
+        let allUsers = JSON.parse(localStorage.getItem('allUsers')) || [];
+        let allSessionData = JSON.parse(localStorage.getItem('allSessionData')) || [];
+        let studentQuestions = JSON.parse(localStorage.getItem('studentQuestions')) || [];
+        let teacherExplanations = JSON.parse(localStorage.getItem('teacherExplanations')) || [];
+        let teacherAnswers = JSON.parse(localStorage.getItem('teacherAnswers')) || [];
+        let studentResponses = JSON.parse(localStorage.getItem('studentResponses')) || [];
+        let aiAnalysisResults = JSON.parse(localStorage.getItem('aiAnalysisResults')) || [];
+        let currentUser = null;
+
+        function toggleSalaryField() {
+            const userType = document.getElementById('userType').value;
+            const salaryGroup = document.getElementById('salaryGroup');
+            const subjectLabel = document.getElementById('subjectLabel');
+            
+            if (userType === 'teacher') {
+                salaryGroup.classList.remove('hidden');
+                subjectLabel.textContent = "Which subject do you want to teach?";
+            } else {
+                salaryGroup.classList.add('hidden');
+                subjectLabel.textContent = "Which subject do you want to study?";
+            }
+        }
+
+        function completeRegistration() {
+            const form = document.getElementById('registrationForm');
+            if (!form.checkValidity()) {
+                alert('Please fill all required fields first!');
+                return;
+            }
+            
+            // Save user data
+            currentUser = {
+                id: Date.now(),
+                type: document.getElementById('userType').value,
+                name: document.getElementById('fullName').value,
+                institution: document.getElementById('institution').value,
+                classLevel: document.getElementById('classLevel').value,
+                subject: document.getElementById('subject').value,
+                salary: document.getElementById('salary').value,
+                availableTime: document.getElementById('availableTime').value,
+                timestamp: new Date()
+            };
+            
+            allUsers.push(currentUser);
+            localStorage.setItem('allUsers', JSON.stringify(allUsers));
+            
+            // Show main dashboard
+            document.getElementById('registrationSection').classList.add('hidden');
+            document.getElementById('mainDashboard').classList.remove('hidden');
+            
+            // Update user info
+            document.getElementById('userAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userRole').textContent = `${currentUser.type} • ${currentUser.subject}`;
+            
+            // Load appropriate Q&A interface
+            if (currentUser.type === 'student') {
+                document.getElementById('studentQA').classList.remove('hidden');
+                loadTeacherContentForStudent();
+            } else {
+                document.getElementById('teacherQA').classList.remove('hidden');
+                loadStudentQuestionsForTeacher();
+            }
+            
+            // Load recommendations
+            loadRecommendations();
+            loadNotifications();
+        }
+
+        function showTab(tabName) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+            
+            // Show selected tab
+            document.getElementById(tabName + 'Tab').classList.remove('hidden');
+            
+            // Update active tab
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            event.target.classList.add('active');
+            
+            // Refresh content if needed
+            if (tabName === 'recommendations') {
+                loadRecommendations();
+            } else if (tabName === 'notifications') {
+                loadNotifications();
+            }
+        }
+
+        // Load student questions for teacher to answer
+        function loadStudentQuestionsForTeacher() {
+            const subject = currentUser.subject;
+            const pendingQuestions = studentQuestions.filter(q => 
+                q.subject === subject && q.status === 'waiting'
+            );
+            
+            if (pendingQuestions.length > 0) {
+                document.getElementById('pendingStudentQuestions').innerHTML = pendingQuestions.map(question => `
+                    <div style="background: white; padding: 10px; margin: 10px 0; border-radius: 8px; border: 1px solid #10b981;">
+                        <strong>Student ${question.studentName} asked:</strong><br>
+                        "${question.question}"
+                    </div>
+                `).join('');
+            } else {
+                document.getElementById('pendingStudentQuestions').innerHTML = '<p>No pending questions for your subject yet.</p>';
+            }
+        }
+
+        // Load teacher content for student to see
+        function loadTeacherContentForStudent() {
+            const subject = currentUser.subject;
+            const explanations = teacherExplanations.filter(e => e.subject === subject);
+            const answers = teacherAnswers.filter(a => a.subject === subject);
+            
+            let contentHTML = '';
+            
+            if (explanations.length > 0) {
+                contentHTML += `<h5>📚 Teacher Explanations:</h5>`;
+                contentHTML += explanations.map(exp => `
+                    <div style="background: white; padding: 10px; margin: 10px 0; border-radius: 8px; border: 1px solid #2563eb;">
+                        <strong>Teacher ${exp.teacherName}:</strong><br>
+                        "${exp.explanation}"
+                    </div>
+                `).join('');
+            }
+            
+            if (answers.length > 0) {
+                contentHTML += `<h5>💬 Teacher Answers:</h5>`;
+                contentHTML += answers.map(ans => `
+                    <div style="background: white; padding: 10px; margin: 10px 0; border-radius: 8px; border: 1px solid #2563eb;">
+                        <strong>Teacher ${ans.teacherName} answered:</strong><br>
+                        "<em>${ans.originalQuestion}</em>"<br>
+                        <strong>Answer:</strong> "${ans.answer}"
+                    </div>
+                `).join('');
+            }
+            
+            if (contentHTML === '') {
+                contentHTML = '<p>No content available for your subject yet. Be the first to ask a question!</p>';
+            }
+            
+            document.getElementById('teacherContentDisplay').innerHTML = contentHTML;
+        }
+
+        // Save teacher content (answers or explanations)
+        function saveTeacherContent() {
+            const answerToStudent = document.getElementById('teacherAnswerToStudent').value.trim();
+            const newExplanation = document.getElementById('teacherNewExplanation').value.trim();
+            
+            if (!answerToStudent && !newExplanation) {
+                alert('Please provide either an answer to student questions or a new explanation!');
+                return;
+            }
+            
+            const teacherData = {
+                id: Date.now(),
+                teacherName: currentUser.name,
+                subject: currentUser.subject,
+                timestamp: new Date()
+            };
+            
+            if (answerToStudent) {
+                // Find the first pending student question to answer
+                const pendingQuestion = studentQuestions.find(q => 
+                    q.subject === teacherData.subject && q.status === 'waiting'
+                );
+                
+                if (pendingQuestion) {
+                    const teacherAnswer = {
+                        ...teacherData,
+                        type: 'answer',
+                        originalQuestion: pendingQuestion.question,
+                        studentName: pendingQuestion.studentName,
+                        answer: answerToStudent
+                    };
+                    
+                    teacherAnswers.push(teacherAnswer);
+                    localStorage.setItem('teacherAnswers', JSON.stringify(teacherAnswers));
+                    
+                    // Mark student question as answered
+                    pendingQuestion.status = 'answered';
+                    localStorage.setItem('studentQuestions', JSON.stringify(studentQuestions));
+                    
+                    // Clear the input
+                    document.getElementById('teacherAnswerToStudent').value = '';
+                    
+                    // Reload questions
+                    loadStudentQuestionsForTeacher();
+                } else {
+                    alert('No pending student questions to answer!');
+                    return;
+                }
+            }
+            
+            if (newExplanation) {
+                const teacherExplanation = {
+                    ...teacherData,
+                    type: 'explanation', 
+                    explanation: newExplanation
+                };
+                
+                teacherExplanations.push(teacherExplanation);
+                localStorage.setItem('teacherExplanations', JSON.stringify(teacherExplanations));
+                
+                // Clear the input
+                document.getElementById('teacherNewExplanation').value = '';
+            }
+            
+            showSuccessMessage('Your content has been saved!');
+        }
+
+        // Save student content (questions or responses)
+        function saveStudentContent() {
+            const newQuestion = document.getElementById('studentNewQuestion').value.trim();
+            const responseToTeacher = document.getElementById('studentResponseToTeacher').value.trim();
+            
+            if (!newQuestion && !responseToTeacher) {
+                alert('Please provide either a new question or a response to teacher content!');
+                return;
+            }
+            
+            const studentData = {
+                id: Date.now(),
+                studentName: currentUser.name,
+                subject: currentUser.subject,
+                timestamp: new Date()
+            };
+            
+            if (newQuestion) {
+                const studentQuestion = {
+                    ...studentData,
+                    type: 'question',
+                    question: newQuestion,
+                    status: 'waiting'
+                };
+                
+                studentQuestions.push(studentQuestion);
+                localStorage.setItem('studentQuestions', JSON.stringify(studentQuestions));
+                
+                // Clear the input
+                document.getElementById('studentNewQuestion').value = '';
+            }
+            
+            if (responseToTeacher) {
+                const studentResponse = {
+                    ...studentData,
+                    type: 'response',
+                    response: responseToTeacher
+                };
+                
+                studentResponses.push(studentResponse);
+                localStorage.setItem('studentResponses', JSON.stringify(studentResponses));
+                
+                // Clear the input
+                document.getElementById('studentResponseToTeacher').value = '';
+            }
+            
+            showSuccessMessage('Your content has been saved!');
+        }
+
+        function showSuccessMessage(message) {
+            const resultDiv = document.getElementById('qaResult');
+            resultDiv.classList.remove('hidden');
+            resultDiv.innerHTML = `
+                <h3>✅ Success!</h3>
+                <div style="margin: 15px 0;">
+                    <strong>${message}</strong>
+                </div>
+            `;
+            
+            // Hide the message after 3 seconds
+            setTimeout(() => {
+                resultDiv.classList.add('hidden');
+            }, 3000);
+        }
+
+        // AI Analysis Functions
+        function runAIAnalysis() {
+            // Analyze all Q&A pairs
+            let analyzedCount = 0;
+            let newMatches = [];
+            
+            teacherAnswers.forEach(teacherAnswer => {
+                const matchingStudentQuestion = studentQuestions.find(sq => 
+                    sq.subject === teacherAnswer.subject && 
+                    sq.studentName === teacherAnswer.studentName
+                );
+                
+                if (matchingStudentQuestion) {
+                    const analysis = performLearningAnalysis(teacherAnswer.answer, matchingStudentQuestion.question);
+                    analyzedCount++;
+                    
+                    const matchData = {
+                        id: Date.now(),
+                        teacher: teacherAnswer,
+                        student: matchingStudentQuestion,
+                        analysis: analysis,
+                        timestamp: new Date()
+                    };
+                    
+                    allSessionData.push(matchData);
+                    newMatches.push(matchData);
+                }
+            });
+            
+            localStorage.setItem('allSessionData', JSON.stringify(allSessionData));
+            
+            if (analyzedCount > 0) {
+                // Generate recommendations based on analysis
+                generateRecommendations(newMatches);
+                alert(`✅ ${analyzedCount} Q&A pairs analyzed! Recommendations generated.`);
+                displaySessionData();
+            } else {
+                alert('❌ No matching Q&A pairs found for analysis.');
+            }
+        }
+
+        function generateRecommendations(matches) {
+            aiAnalysisResults = [];
+            
+            matches.forEach(match => {
+                const teacher = allUsers.find(u => u.name === match.teacher.teacherName && u.type === 'teacher');
+                const student = allUsers.find(u => u.name === match.student.studentName && u.type === 'student');
+                
+                if (teacher && student) {
+                    // Create recommendation for student
+                    aiAnalysisResults.push({
+                        userId: student.id,
+                        type: 'recommendation',
+                        message: `Based on your Q&A analysis, we recommend Teacher ${teacher.name} (${match.analysis.match_result.compatibility_score}% match)`,
+                        matchData: match,
+                        timestamp: new Date()
+                    });
+                    
+                    // Create recommendation for teacher
+                    aiAnalysisResults.push({
+                        userId: teacher.id,
+                        type: 'recommendation', 
+                        message: `Based on Q&A analysis, we recommend Student ${student.name} (${match.analysis.match_result.compatibility_score}% match)`,
+                        matchData: match,
+                        timestamp: new Date()
+                    });
+                }
+            });
+            
+            localStorage.setItem('aiAnalysisResults', JSON.stringify(aiAnalysisResults));
+        }
+
+        function loadRecommendations() {
+            const recommendationsDiv = document.getElementById('recommendationsContent');
+            const userRecommendations = aiAnalysisResults.filter(r => r.userId === currentUser.id);
+            
+            if (userRecommendations.length > 0) {
+                recommendationsDiv.innerHTML = userRecommendations.map(rec => `
+                    <div class="recommendation-card top-match">
+                        <div class="match-score">${rec.matchData.analysis.match_result.compatibility_score}% Match</div>
+                        <h4>⭐ AI Recommended Match</h4>
+                        <p>${rec.message}</p>
+                        <p><strong>Compatibility:</strong> ${rec.matchData.analysis.match_result.recommendation}</p>
+                        <p><strong>Analysis Date:</strong> ${new Date(rec.timestamp).toLocaleDateString()}</p>
+                    </div>
+                `).join('');
+            } else {
+                recommendationsDiv.innerHTML = `
+                    <div class="content-card">
+                        <p>No AI recommendations yet. Complete some Q&A interactions and ask admin to run AI analysis.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function loadNotifications() {
+            const notificationsDiv = document.getElementById('notificationsContent');
+            const userNotifications = aiAnalysisResults.filter(r => r.userId === currentUser.id);
+            
+            if (userNotifications.length > 0) {
+                notificationsDiv.innerHTML = userNotifications.map(notif => `
+                    <div class="notification">
+                        <h4>🔔 New AI Recommendation!</h4>
+                        <p>${notif.message}</p>
+                        <small>${new Date(notif.timestamp).toLocaleString()}</small>
+                    </div>
+                `).join('');
+            } else {
+                notificationsDiv.innerHTML = '<p>No new notifications.</p>';
+            }
+        }
+
+        // AI Analysis Logic (from your Python code)
+        function performLearningAnalysis(teacherAnswer, studentResponse) {
+            const topicQuestion = "Learning Interaction Analysis";
+            
+            // Analyze teacher's pattern
+            const teacherAnalysis = analyzeTeacherPattern(teacherAnswer, topicQuestion);
+            
+            // Analyze student's response
+            const studentAnalysis = analyzeStudentResponse(studentResponse, topicQuestion, teacherAnswer);
+            
+            // Calculate compatibility
+            const matchResult = calculateLearningCompatibility(teacherAnalysis, studentAnalysis);
+            
+            return {
+                teacher_analysis: teacherAnalysis,
+                student_analysis: studentAnalysis,
+                match_result: matchResult
+            };
+        }
+        
+        function analyzeTeacherPattern(teacherAnswer, topicQuestion) {
+            const answerLower = teacherAnswer.toLowerCase();
+            
+            // Teaching style detection
+            const styleScores = {
+                'visual': countStyleIndicators(answerLower, ['see', 'show', 'diagram', 'visual', 'look', 'picture']),
+                'practical': countStyleIndicators(answerLower, ['example', 'practice', 'solve', 'apply', 'use', 'try']),
+                'theoretical': countStyleIndicators(answerLower, ['concept', 'theory', 'principle', 'understand', 'logic', 'fundamental'])
+            };
+            
+            const dominantStyle = Object.keys(styleScores).reduce((a, b) => styleScores[a] > styleScores[b] ? a : b);
+            
+            // Explanation quality
+            const exampleCount = (teacherAnswer.match(/for example|for instance|such as|like/gi) || []).length;
+            const structureScore = analyzeExplanationStructure(teacherAnswer);
+            const relevanceScore = assessTopicRelevance(teacherAnswer, topicQuestion);
+            
+            return {
+                teaching_style: dominantStyle,
+                style_scores: styleScores,
+                example_usage: exampleCount,
+                explanation_structure: structureScore,
+                topic_relevance: relevanceScore,
+                explanation_quality: calculateTeacherQuality(exampleCount, structureScore, relevanceScore)
+            };
+        }
+        
+        function analyzeStudentResponse(studentResponse, topicQuestion, teacherAnswer) {
+            if (!studentResponse || studentResponse.trim() === "") {
+                return { response_type: 'no_response', understanding_level: 'unknown', engagement_score: 1 };
+            }
+            
+            const responseLower = studentResponse.toLowerCase();
+            const topicKeywords = extractKeywords(topicQuestion);
+            
+            const responseType = classifyResponseType(responseLower, topicKeywords, teacherAnswer);
+            const understandingLevel = assessUnderstandingLevel(responseLower, topicKeywords);
+            const engagementScore = calculateEngagement(responseLower, responseType);
+            
+            return {
+                response_type: responseType,
+                understanding_level: understandingLevel,
+                engagement_score: engagementScore,
+                question_quality: assessQuestionQuality(responseType),
+                focus_area: identifyFocusArea(responseLower, topicKeywords, teacherAnswer)
+            };
+        }
+        
+        function classifyResponseType(studentResponse, topicKeywords, teacherAnswer) {
+            const teacherWords = new Set(teacherAnswer.toLowerCase().match(/\b\w+\b/g) || []);
+            const responseWords = new Set(studentResponse.match(/\b\w+\b/g) || []);
+            
+            const conceptualIndicators = ['how', 'why', 'what if', 'connect', 'relate', 'principle', 'concept'];
+            if (conceptualIndicators.some(indicator => studentResponse.includes(indicator))) return 'conceptual_question';
+            
+            const clarificationIndicators = ['what does', 'mean', 'explain', 'repeat', 'again', 'clarify'];
+            if (clarificationIndicators.some(indicator => studentResponse.includes(indicator))) return 'clarification_request';
+            
+            const terminologyIndicators = ['term', 'word', 'definition', 'called', 'named'];
+            if (terminologyIndicators.some(indicator => studentResponse.includes(indicator))) return 'terminology_question';
+            
+            const exampleIndicators = ['example', 'instance', 'case', 'scenario'];
+            if (exampleIndicators.some(indicator => studentResponse.includes(indicator))) return 'example_request';
+            
+            const topicWordOverlap = [...responseWords].filter(word => topicKeywords.includes(word)).length;
+            if (topicWordOverlap === 0 && responseWords.size > 3) return 'off_topic';
+            
+            const understandingIndicators = ['understand', 'clear', 'get it', 'makes sense', 'see now'];
+            if (understandingIndicators.some(indicator => studentResponse.includes(indicator))) return 'understanding_statement';
+            
+            return 'general_response';
+        }
+        
+        function calculateLearningCompatibility(teacherAnalysis, studentAnalysis) {
+            let baseScore = 50;
+            
+            const styleResponseCompatibility = {
+                'visual': { 'conceptual_question': 20, 'example_request': 15, 'clarification_request': 10 },
+                'practical': { 'example_request': 20, 'conceptual_question': 15, 'understanding_statement': 10 },
+                'theoretical': { 'conceptual_question': 20, 'clarification_request': 15, 'terminology_question': 10 }
+            };
+            
+            const styleBonus = styleResponseCompatibility[teacherAnalysis.teaching_style]?.[studentAnalysis.response_type] || 0;
+            baseScore += styleBonus;
+            baseScore += (studentAnalysis.engagement_score - 5) * 2;
+            
+            const understandingBonus = { 'deep': 15, 'basic': 5, 'surface': -5, 'minimal': -10 };
+            baseScore += understandingBonus[studentAnalysis.understanding_level] || 0;
+            
+            const qualityBonus = { 'high': 10, 'medium': 5, 'low': 0, 'very_low': -10, 'none': -15 };
+            baseScore += qualityBonus[studentAnalysis.question_quality] || 0;
+            
+            const focusBonus = { 'core_concept': 10, 'mixed_focus': 5, 'teacher_examples': 0 };
+            baseScore += focusBonus[studentAnalysis.focus_area] || 0;
+            
+            const finalScore = Math.max(0, Math.min(100, baseScore));
+            
+            let recommendation;
+            if (finalScore >= 80) recommendation = "HIGHLY RECOMMENDED - Excellent learning interaction";
+            else if (finalScore >= 60) recommendation = "RECOMMENDED - Good teaching-learning match";
+            else if (finalScore >= 40) recommendation = "CONDITIONALLY RECOMMENDED - May work with adjustments";
+            else recommendation = "NOT RECOMMENDED - Poor communication match";
+            
+            return {
+                compatibility_score: finalScore,
+                recommendation: recommendation,
+                strengths: identifyStrengths(teacherAnalysis, studentAnalysis),
+                improvement_areas: identifyImprovements(teacherAnalysis, studentAnalysis)
+            };
+        }
+        
+        // Helper functions
+        function countStyleIndicators(text, indicators) {
+            return indicators.filter(indicator => text.includes(indicator)).length;
+        }
+        
+        function analyzeExplanationStructure(text) {
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim());
+            if (sentences.length <= 1) return 3;
+            const transitionWords = ['first', 'then', 'next', 'finally', 'however', 'therefore'];
+            const transitions = transitionWords.filter(word => text.toLowerCase().includes(word)).length;
+            return Math.min(transitions + 5, 10);
+        }
+        
+        function assessTopicRelevance(text, topic) {
+            const topicWords = new Set(topic.toLowerCase().match(/\b\w+\b/g) || []);
+            const textWords = new Set(text.toLowerCase().match(/\b\w+\b/g) || []);
+            const overlap = [...textWords].filter(word => topicWords.has(word)).length;
+            return Math.min(overlap * 2, 10);
+        }
+        
+        function calculateTeacherQuality(examples, structure, relevance) {
+            return (examples * 0.3 + structure * 0.4 + relevance * 0.3) * 10;
+        }
+        
+        function extractKeywords(text) {
+            const words = text.toLowerCase().match(/\b\w+\b/g) || [];
+            const commonWords = new Set(['what', 'is', 'the', 'a', 'an', 'how', 'why', 'explain']);
+            return words.filter(word => !commonWords.has(word) && word.length > 2);
+        }
+        
+        function assessUnderstandingLevel(studentResponse, topicKeywords) {
+            const keywordMatches = topicKeywords.filter(keyword => studentResponse.includes(keyword)).length;
+            const responseLength = studentResponse.split(/\s+/).length;
+            
+            if (responseLength < 5) return 'minimal';
+            
+            const conceptualIndicators = ['because', 'therefore', 'so that', 'which means'];
+            const hasConceptualLinking = conceptualIndicators.some(indicator => studentResponse.includes(indicator));
+            
+            if (hasConceptualLinking && keywordMatches >= 2) return 'deep';
+            else if (keywordMatches >= 1) return 'basic';
+            else return 'surface';
+        }
+        
+        function calculateEngagement(studentResponse, responseType) {
+            const engagementScores = {
+                'conceptual_question': 9, 'clarification_request': 7, 'example_request': 6,
+                'terminology_question': 5, 'understanding_statement': 8, 'general_response': 4,
+                'off_topic': 2, 'no_response': 1
+            };
+            
+            let baseScore = engagementScores[responseType] || 5;
+            const words = studentResponse.split(/\s+/);
+            if (words.length > 15) baseScore += 2;
+            else if (words.length > 8) baseScore += 1;
+            
+            return Math.min(baseScore, 10);
+        }
+        
+        function assessQuestionQuality(responseType) {
+            const qualityScores = {
+                'conceptual_question': 'high', 'understanding_statement': 'high',
+                'clarification_request': 'medium', 'example_request': 'medium',
+                'terminology_question': 'medium', 'general_response': 'low',
+                'off_topic': 'very_low', 'no_response': 'none'
+            };
+            return qualityScores[responseType] || 'low';
+        }
+        
+        function identifyFocusArea(studentResponse, topicKeywords, teacherAnswer) {
+            const teacherWords = new Set(teacherAnswer.toLowerCase().match(/\b\w+\b/g) || []);
+            const responseWords = new Set(studentResponse.match(/\b\w+\b/g) || []);
+            
+            const topicOverlap = [...responseWords].filter(word => topicKeywords.includes(word)).length;
+            const teacherOverlap = [...responseWords].filter(word => teacherWords.has(word)).length;
+            
+            if (topicOverlap > teacherOverlap) return 'core_concept';
+            else if (teacherOverlap > topicOverlap) return 'teacher_examples';
+            else return 'mixed_focus';
+        }
+        
+        function identifyStrengths(teacherAnalysis, studentAnalysis) {
+            const strengths = [];
+            
+            if (teacherAnalysis.example_usage > 0 && studentAnalysis.response_type === 'example_request') {
+                strengths.push("Teacher provides examples when student needs them");
+            }
+            
+            if (studentAnalysis.question_quality === 'high') {
+                strengths.push("Student asks high-quality conceptual questions");
+            }
+            
+            if (teacherAnalysis.explanation_quality >= 7 && studentAnalysis.understanding_level === 'deep') {
+                strengths.push("Effective knowledge transfer occurring");
+            }
+            
+            if (studentAnalysis.engagement_score >= 8) {
+                strengths.push("High student engagement");
+            }
+            
+            return strengths.length > 0 ? strengths : ["Basic communication established"];
+        }
+        
+        function identifyImprovements(teacherAnalysis, studentAnalysis) {
+            const improvements = [];
+            
+            if (studentAnalysis.response_type === 'off_topic') {
+                improvements.push("Student gets distracted - need better topic focus");
+            }
+            
+            if (studentAnalysis.understanding_level === 'minimal') {
+                improvements.push("Student shows minimal understanding - simplify explanation");
+            }
+            
+            if (teacherAnalysis.example_usage === 0 && studentAnalysis.response_type === 'example_request') {
+                improvements.push("Student needs examples but teacher isn't providing them");
+            }
+            
+            if (studentAnalysis.engagement_score <= 4) {
+                improvements.push("Low student engagement - need more interactive teaching");
+            }
+            
+            return improvements.length > 0 ? improvements : ["Continue current approach"];
+        }
+
+        // Admin Functions
+        let tapCount = 0;
+        document.querySelector('h1').addEventListener('click', function() {
+            tapCount++;
+            if (tapCount === 3) {
+                document.getElementById('adminBtn').style.display = 'block';
+                alert('🔓 Admin mode activated!');
+                tapCount = 0;
+            }
+        });
+
+        function viewAdminDashboard() {
+            const password = prompt("🔐 Enter Admin Password:");
+            if (password === "tutor2024") {
+                document.getElementById('mainDashboard').classList.add('hidden');
+                document.getElementById('adminDashboard').classList.remove('hidden');
+                displaySessionData();
+            } else {
+                alert("❌ Access Denied! Admin only.");
+            }
+        }
+
+        function hideAdminDashboard() {
+            document.getElementById('adminDashboard').classList.add('hidden');
+            document.getElementById('mainDashboard').classList.remove('hidden');
+        }
+
+        function displaySessionData() {
+            const sessionDataDiv = document.getElementById('sessionData');
+            
+            sessionDataDiv.innerHTML = `
+                <h5>📊 User Statistics</h5>
+                <div style="background: #f0fdf4; padding: 10px; border-radius: 5px; margin: 10px 0;">
+                    <strong>Total Users:</strong> ${allUsers.length}<br>
+                    <strong>Students:</strong> ${allUsers.filter(u => u.type === 'student').length}<br>
+                    <strong>Teachers:</strong> ${allUsers.filter(u => u.type === 'teacher').length}
+                </div>
+                
+                <div style="background: #f0fdf4; padding: 10px; border-radius: 5px; margin: 10px 0;">
+                    <h5>❓ Student Questions (${studentQuestions.length})</h5>
+                    ${studentQuestions.map(q => `
+                        <div style="border: 1px solid #10b981; padding: 10px; margin: 5px 0; border-radius: 5px;">
+                            <strong>${q.studentName}</strong> - ${q.subject} (${q.status})<br>
+                            <strong>Q:</strong> ${q.question}
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <div style="background: #e0f2fe; padding: 10px; border-radius: 5px; margin: 10px 0;">
+                    <h5>📚 Teacher Content (${teacherExplanations.length + teacherAnswers.length})</h5>
+                    ${teacherExplanations.map(e => `
+                        <div style="border: 1px solid #2563eb; padding: 10px; margin: 5px 0; border-radius: 5px;">
+                            <strong>${e.teacherName}</strong> - Explanation<br>
+                            ${e.explanation}
+                        </div>
+                    `).join('')}
+                    ${teacherAnswers.map(a => `
+                        <div style="border: 1px solid #2563eb; padding: 10px; margin: 5px 0; border-radius: 5px;">
+                            <strong>${a.teacherName}</strong> - Answer to ${a.studentName}<br>
+                            <strong>Q:</strong> ${a.originalQuestion}<br>
+                            <strong>A:</strong> ${a.answer}
+                        </div>
+                    `).join('')}
+                </div>
+                
+                <h5>🤖 AI Analysis Results</h5>
+                ${allSessionData.map(session => `
+                    <div style="border: 1px solid #e5e7eb; padding: 10px; margin: 5px 0; border-radius: 5px;">
+                        <strong>${session.teacher.teacherName} 👨‍🏫 + ${session.student.studentName} 👨‍🎓</strong><br>
+                        <span class="${getScoreClass(session.analysis.match_result.compatibility_score)}">AI Score: ${session.analysis.match_result.compatibility_score}%</span><br>
+                        <strong>Recommendation:</strong> ${session.analysis.match_result.recommendation}<br>
+                        <small>${new Date(session.timestamp).toLocaleString()}</small>
+                    </div>
+                `).join('')}
+                
+                ${allSessionData.length === 0 ? '<p>No AI analysis performed yet.</p>' : ''}
+            `;
+        }
+
+        function getScoreClass(score) {
+            if (score >= 80) return 'score-high';
+            if (score >= 60) return 'score-medium';
+            return 'score-low';
+        }
+    </script>
+</body>
+</html>
