@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html>
 <head>
     <title>TutorMatch AI - Smart Learning Platform</title>
@@ -251,8 +251,23 @@
         <h1>🎓 TutorMatch AI</h1>
         <p class="subtitle">Smart Matching & Learning Analysis Platform</p>
         
+        <!-- Login Section -->
+        <div id="loginSection">
+            <h2>Login to TutorMatch AI</h2>
+            <div class="form-group">
+                <label>Your Name</label>
+                <input type="text" id="loginName" placeholder="Enter your registered name" required>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="loginPassword" placeholder="Enter your password" required>
+            </div>
+            <button onclick="loginUser()">Login</button>
+            <button class="secondary" onclick="showRegistration()">New User? Register</button>
+        </div>
+
         <!-- Registration Form -->
-        <div id="registrationSection">
+        <div id="registrationSection" class="hidden">
             <form id="registrationForm">
                 <!-- User Type -->
                 <div class="form-group">
@@ -268,6 +283,11 @@
                 <div class="form-group">
                     <label>Full Name</label>
                     <input type="text" id="fullName" placeholder="Enter your full name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Create Password</label>
+                    <input type="password" id="password" placeholder="Create your password" required>
                 </div>
                 
                 <div class="form-group">
@@ -325,6 +345,7 @@
                 </div>
                 
                 <button type="button" onclick="completeRegistration()">Complete Registration</button>
+                <button type="button" class="secondary" onclick="showLogin()">Back to Login</button>
             </form>
         </div>
 
@@ -420,6 +441,7 @@
             </div>
 
             <button onclick="viewAdminDashboard()" class="secondary" style="display: none;" id="adminBtn">Admin Dashboard</button>
+            <button onclick="logout()" class="secondary" style="margin-top: 20px;">Logout</button>
         </div>
 
         <!-- Admin Dashboard -->
@@ -445,6 +467,64 @@
         let aiAnalysisResults = JSON.parse(localStorage.getItem('aiAnalysisResults')) || [];
         let currentUser = null;
 
+        // Login Functions
+        function loginUser() {
+            const name = document.getElementById('loginName').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            const user = allUsers.find(u => u.name === name && u.password === password);
+            
+            if (user) {
+                currentUser = user;
+                document.getElementById('loginSection').classList.add('hidden');
+                document.getElementById('mainDashboard').classList.remove('hidden');
+                loadUserDashboard();
+            } else {
+                alert('Invalid name or password!');
+            }
+        }
+
+        function showRegistration() {
+            document.getElementById('loginSection').classList.add('hidden');
+            document.getElementById('registrationSection').classList.remove('hidden');
+        }
+
+        function showLogin() {
+            document.getElementById('registrationSection').classList.add('hidden');
+            document.getElementById('loginSection').classList.remove('hidden');
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('mainDashboard').classList.add('hidden');
+            document.getElementById('loginSection').classList.remove('hidden');
+            // Clear login fields
+            document.getElementById('loginName').value = '';
+            document.getElementById('loginPassword').value = '';
+        }
+
+        function loadUserDashboard() {
+            // Update user info
+            document.getElementById('userAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('userRole').textContent = `${currentUser.type} • ${currentUser.subject}`;
+            
+            // Load appropriate Q&A interface
+            if (currentUser.type === 'student') {
+                document.getElementById('studentQA').classList.remove('hidden');
+                document.getElementById('teacherQA').classList.add('hidden');
+                loadTeacherContentForStudent();
+            } else {
+                document.getElementById('teacherQA').classList.remove('hidden');
+                document.getElementById('studentQA').classList.add('hidden');
+                loadStudentQuestionsForTeacher();
+            }
+            
+            // Load recommendations and notifications
+            loadRecommendations();
+            loadNotifications();
+        }
+
         function toggleSalaryField() {
             const userType = document.getElementById('userType').value;
             const salaryGroup = document.getElementById('salaryGroup');
@@ -466,11 +546,19 @@
                 return;
             }
             
+            // Check if user already exists
+            const existingUser = allUsers.find(u => u.name === document.getElementById('fullName').value);
+            if (existingUser) {
+                alert('User with this name already exists! Please choose a different name or login.');
+                return;
+            }
+            
             // Save user data
             currentUser = {
                 id: Date.now(),
                 type: document.getElementById('userType').value,
                 name: document.getElementById('fullName').value,
+                password: document.getElementById('password').value,
                 institution: document.getElementById('institution').value,
                 classLevel: document.getElementById('classLevel').value,
                 subject: document.getElementById('subject').value,
@@ -486,23 +574,7 @@
             document.getElementById('registrationSection').classList.add('hidden');
             document.getElementById('mainDashboard').classList.remove('hidden');
             
-            // Update user info
-            document.getElementById('userAvatar').textContent = currentUser.name.charAt(0).toUpperCase();
-            document.getElementById('userName').textContent = currentUser.name;
-            document.getElementById('userRole').textContent = `${currentUser.type} • ${currentUser.subject}`;
-            
-            // Load appropriate Q&A interface
-            if (currentUser.type === 'student') {
-                document.getElementById('studentQA').classList.remove('hidden');
-                loadTeacherContentForStudent();
-            } else {
-                document.getElementById('teacherQA').classList.remove('hidden');
-                loadStudentQuestionsForTeacher();
-            }
-            
-            // Load recommendations
-            loadRecommendations();
-            loadNotifications();
+            loadUserDashboard();
         }
 
         function showTab(tabName) {
@@ -828,7 +900,7 @@
             }
         }
 
-        // AI Analysis Logic (from your Python code)
+        // AI Analysis Logic
         function performLearningAnalysis(teacherAnswer, studentResponse) {
             const topicQuestion = "Learning Interaction Analysis";
             
@@ -1168,6 +1240,11 @@
             if (score >= 60) return 'score-medium';
             return 'score-low';
         }
+
+        // Initialize - Show login screen first
+        document.getElementById('registrationSection').classList.add('hidden');
+        document.getElementById('mainDashboard').classList.add('hidden');
+        document.getElementById('loginSection').classList.remove('hidden');
     </script>
 </body>
 </html>
