@@ -247,6 +247,13 @@
     </style>
 </head>
 <body>
+ <!-- Language Selector -->
+<div style="text-align: right; margin-bottom: 15px;">
+    <select id="language" onchange="changeLanguage()">
+        <option value="en">English</option>
+        <option value="bn">বাংলা</option>
+    </select>
+</div>
     <div class="container">
         <h1>🎓 TutorMatch AI</h1>
         <p class="subtitle">Smart Matching & Learning Analysis Platform</p>
@@ -1305,6 +1312,114 @@ function respondToAnswer(teacherName, answer) {
     showTab('qa');
     document.getElementById('studentResponseToTeacher').focus();
 }
+     // ===== LANGUAGE SUPPORT =====
+let currentLanguage = 'en';
+
+function changeLanguage() {
+    currentLanguage = document.getElementById('language').value;
+    updateAllText();
+}
+
+function updateAllText() {
+    const translations = {
+        en: {
+            // Registration
+            roleSelect: "Select your role",
+            student: "Student",
+            teacher: "Teacher", 
+            fullName: "Full Name",
+            password: "Create Password",
+            institution: "Institution",
+            classLevel: "Class/Grade",
+            subjectStudy: "Which subject do you want to study?",
+            subjectTeach: "Which subject do you want to teach?",
+            salary: "Expected Salary",
+            time: "Preferred Time",
+            
+            // Buttons
+            login: "Login",
+            register: "Complete Registration",
+            newUser: "New User? Register",
+            backLogin: "Back to Login",
+            save: "Save Content",
+            askQuestion: "Ask New Question",
+            respond: "Respond to Teacher's Explanation",
+            
+            // Tabs
+            recommendations: "Recommendations",
+            qa: "Q&A System", 
+            notifications: "Notifications"
+        },
+        bn: {
+            // Registration
+            roleSelect: "আপনার ভূমিকা নির্বাচন করুন",
+            student: "শিক্ষার্থী",
+            teacher: "শিক্ষক",
+            fullName: "পূর্ণ নাম",
+            password: "পাসওয়ার্ড তৈরি করুন",
+            institution: "শিক্ষাপ্রতিষ্ঠান",
+            classLevel: "ক্লাস/গ্রেড",
+            subjectStudy: "আপনি কোন বিষয় পড়তে চান?",
+            subjectTeach: "আপনি কোন বিষয় শেখাতে চান?",
+            salary: "প্রত্যাশিত বেতন",
+            time: "পছন্দের সময়",
+            
+            // Buttons  
+            login: "লগইন",
+            register: "নিবন্ধন সম্পূর্ণ করুন",
+            newUser: "নতুন ব্যবহারকারী? নিবন্ধন করুন",
+            backLogin: "লগইনে ফিরে যান",
+            save: "কনটেন্ট সংরক্ষণ করুন",
+            askQuestion: "নতুন প্রশ্ন করুন",
+            respond: "শিক্ষকের ব্যাখ্যায় প্রতিক্রিয়া দিন",
+            
+            // Tabs
+            recommendations: "সুপারিশসমূহ",
+            qa: "প্রশ্নোত্তর সিস্টেম",
+            notifications: "নোটিফিকেশন"
+        }
+    };
+    
+    const t = translations[currentLanguage];
+    
+    // Update registration form
+    document.querySelector('label[for="userType"]').textContent = t.roleSelect;
+    document.querySelector('option[value="student"]').textContent = t.student;
+    document.querySelector('option[value="teacher"]').textContent = t.teacher;
+    document.querySelector('label[for="fullName"]').textContent = t.fullName;
+    document.querySelector('label[for="password"]').textContent = t.password;
+    document.querySelector('label[for="institution"]').textContent = t.institution;
+    document.querySelector('label[for="classLevel"]').textContent = t.classLevel;
+    
+    // Update subject label based on user type
+    const userType = document.getElementById('userType').value;
+    document.getElementById('subjectLabel').textContent = 
+        userType === 'teacher' ? t.subjectTeach : t.subjectStudy;
+    
+    // Update buttons
+    document.querySelector('button[onclick="loginUser()"]').textContent = t.login;
+    document.querySelector('button[onclick="completeRegistration()"]').textContent = t.register;
+    document.querySelector('button[onclick="showRegistration()"]').textContent = t.newUser;
+    document.querySelector('button[onclick="showLogin()"]').textContent = t.backLogin;
+    
+    // Update Q&A buttons
+    const saveStudentBtn = document.querySelector('button[onclick="saveStudentContent()"]');
+    const saveTeacherBtn = document.querySelector('button[onclick="saveTeacherContent()"]');
+    if (saveStudentBtn) saveStudentBtn.textContent = t.save;
+    if (saveTeacherBtn) saveTeacherBtn.textContent = t.save;
+    
+    // Update tabs
+    document.querySelector('.tab[onclick="showTab(\'recommendations\')"]').textContent = t.recommendations;
+    document.querySelector('.tab[onclick="showTab(\'qa\')"]').textContent = t.qa;
+    document.querySelector('.tab[onclick="showTab(\'notifications\')"]').textContent = t.notifications;
+}
+
+// Update language when user type changes
+document.getElementById('userType').addEventListener('change', function() {
+    if (typeof updateAllText === 'function') {
+        updateAllText();
+    }
+});
     </script>
 </body>
 </html>
